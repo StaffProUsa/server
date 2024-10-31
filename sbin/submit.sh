@@ -1,0 +1,1 @@
+scp server.jar servisofts@192.168.2.2:/home/servisofts/servicios/StaffProUsa/entornos/StaffProUsa/servicios/StaffProUsa/

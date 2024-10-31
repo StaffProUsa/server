@@ -1,0 +1,16 @@
+{
+  "Servicios": {
+    "notification": true,
+    "sqr": true,
+    "roles_permisos": true,
+    "usuario": true,
+    "geolocation": true,
+    "status": "desconectado"
+  },
+  "PostgreSQL": {
+    "host": "jdbc:postgresql://192.168.5.53:5432/servisofts.StaffProUsa",
+    "status": "exito"
+  },
+  "- SLog": "RealTime Log from server Servisofts",
+  "- Fecha": "2024-10-29T18:23:36.000479"
+}

@@ -1,0 +1,13 @@
+#!/bin/bash
+
+url="http://192.168.2.1:30018/rest/banco_ganadero/callback"
+
+# Calistenia 
+
+    curl --header "Content-Type: application/json" \
+    --data '{
+            "qrid":"24020701018000054431"
+        }' \
+	--request POST \
+	$url > .init.json
+cat .init.json
