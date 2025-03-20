@@ -1,11 +1,8 @@
 package Component;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import Server.SSSAbstract.SSServerAbstract;
 import Servisofts.SConsole;
 import Servisofts.SPGConect;
+import Servisofts.SUtil;
 
 public class Background extends Thread {
 
@@ -13,27 +10,19 @@ public class Background extends Thread {
     public void run() {
         while (true) {
             try {
+                System.out.println("Quitando los que no aceptaron la invitacion...");
                 
-                /*String consulta = "SELECT _reservas() as json";
-                JSONArray data = SPGConect.ejecutarConsultaArray(consulta);
-                if (data.length() > 0) {
-                    System.out.println(data);
-                    JSONObject send = new JSONObject();
-                    send.put("component", "mesa");
-                    send.put("type", "editarAll");
-                    send.put("data", data);
-                    send.put("estado", "borrar");
-                    SSServerAbstract.sendAllServer(send.toString());
-                }
+                String consulta = "select quitar_no_aprobados() as json";
+                
+                SPGConect.execute(consulta);
 
-
-                */
-                Thread.sleep(5000);
+                String fecha = SUtil.now();
+                System.out.println(fecha);
+                
+                Thread.sleep(30*60*1000);
             } catch (Exception e) {
                 SConsole.error(e.getLocalizedMessage());
             }
         }
     }
-
-    
 }

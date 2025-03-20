@@ -1,6 +1,9 @@
+package Component;
 
 import java.io.FileReader;
+
 import javax.mail.Message;
+import javax.mail.PasswordAuthentication;
 import javax.mail.Session;
 import org.json.JSONArray;
 import Servisofts.SConfig;
@@ -35,22 +38,21 @@ public class Email extends Thread {
         this.start();
     }
 
-    // public static void main(String[] args) {
-    // JSONObject obj = new JSONObject();
-    // obj.put("correo", "ricky.paz.d.97@gmail.com");
-    // new EmailRegistroUsr(obj).start();
-    // }
-
     @Override
     public void run() {
         try {
             Properties props = new Properties();
             props.setProperty("mail.smtp.host", this.host);
-            props.put("mail.smtp.ssl.enable", "true");
             props.setProperty("mail.smtp.port", this.port);
-            props.setProperty("mail.smtp.user", this.user);
             props.setProperty("mail.smtp.auth", "true");
-            Session session = Session.getDefaultInstance(props);
+            props.put("mail.smtp.starttls.enable", "true"); // Usar TLS en lugar de SSL
+
+            Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+                protected PasswordAuthentication getPasswordAuthentication() {
+                    return new PasswordAuthentication(Email.this.user, Email.this.pass);
+                }
+            });
+
             MimeMessage message = new MimeMessage(session);
             message.setFrom(new InternetAddress(this.user));
             for (int i = 0; i < this.mailTo.length(); i++) {
@@ -58,10 +60,8 @@ public class Email extends Thread {
             }
             message.setSubject(this.data.getString("subject"));
             message.setContent(getHtml(this.data.getString("path"), this.params), "text/html; charset=UTF-8");
-            Transport t = session.getTransport("smtp");
-            t.connect(this.user, this.pass);
-            t.sendMessage(message, message.getAllRecipients());
-            t.close();
+            
+            Transport.send(message);
             System.out.println("Correo enviado a " + this.mailTo);
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -87,18 +87,8 @@ public class Email extends Thread {
                 }
             }
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
-
         return cuerpo;
-    }
-
-    public static void main(String[] args) {
-        new Email(
-            new JSONArray().put("ruddypad@gmail.com"), 
-            new JSONObject().put("subject", "Test").put("path", "mail/recuperar_pass.html"), 
-            new JSONObject()
-        );
     }
 }

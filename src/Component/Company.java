@@ -23,6 +23,22 @@ public class Company {
             case "editar":
                 editar(obj, session);
                 break;
+            case "getReporteGeneral":
+                getReporteGeneral(obj, session);
+                break;
+        }
+    }
+
+    public static void getReporteGeneral(JSONObject obj, SSSessionAbstract session) {
+        try {
+            String consulta = "select reporte_general('"+obj.getString("key_company")+"','" + obj.getString("fecha_inicio") + "', '"+obj.getString("fecha_fin")+"') as json";
+            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            obj.put("data", data);
+            obj.put("estado", "exito");
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            obj.put("error", e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
 

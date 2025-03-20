@@ -3,6 +3,7 @@ package Component;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import Server.SSSAbstract.SSSessionAbstract;
+import Servisofts.SConfig;
 import Servisofts.SPGConect;
 import Servisofts.SUtil;
 
@@ -11,42 +12,19 @@ public class Evento {
 
     public static void onMessage(JSONObject obj, SSSessionAbstract session) {
         switch (obj.getString("type")) {
-            case "getAll":
-                getAll(obj, session);
-                break;
-            case "getInicioFiltros":
-                getInicioFiltros(obj, session);
-                break;
-            case "getInicio":
-                 getInicio(obj, session);
-                break;
-            case "getByKey":
-                getByKey(obj, session);
-                break;
-            case "getPerfil":
-                getPerfil(obj, session);
-                break;
-            case "registro":
-                registro(obj, session);
-                break;
-            case "editar":
-                editar(obj, session);
-                break;
-            case "getEntregas":
-                getEntregas(obj, session);
-                break;
-            case "getEstadoReclutas":
-                getEstadoReclutas(obj, session);
-                break;
-            case "getEstadoAsistencias":
-                getEstadoAsistencias(obj, session);
-                break;
-            case "getEstadoEventos":
-                getEstadoEventos(obj, session);
-                break;
-            case "getTrabajosPerfil":
-                getTrabajosPerfil(obj, session);
-                break;
+            case "getAll": getAll(obj, session); break;
+            case "getInicioFiltros": getInicioFiltros(obj, session); break;
+            case "getInicio": getInicio(obj, session); break;
+            case "getByKey": getByKey(obj, session); break;
+            case "getPerfil": getPerfil(obj, session); break;
+            case "registro": registro(obj, session); break;
+            case "editar": editar(obj, session); break;
+            case "duplicar": duplicar(obj, session); break;
+            case "getEntregas": getEntregas(obj, session); break;
+            case "getEstadoReclutas": getEstadoReclutas(obj, session); break;
+            case "getEstadoAsistencias": getEstadoAsistencias(obj, session); break;
+            case "getEstadoEventos": getEstadoEventos(obj, session); break;
+            case "getTrabajosPerfil": getTrabajosPerfil(obj, session); break;
         }
     }
 
@@ -240,6 +218,47 @@ public class Evento {
             obj.put("estado", "exito");
             
             enviarNotificacionEventoVentaEnable(dataOld, data, obj.getString("key_usuario"));
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            obj.put("error", e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void main(String[] args) {
+        //duplucar evento
+        SPGConect.setConexion(SConfig.getJSON("data_base"));
+        JSONObject obj = new JSONObject();
+        obj.put("key_evento", "d1b84a36-daa1-49bd-ad7d-70d45704ffb2");
+        duplicar(obj, null);
+    }
+
+    public static void duplicar(JSONObject obj, SSSessionAbstract session) {
+        try {
+            String key = obj.getString("key_evento");
+
+            JSONObject evento = getByKey(key);
+            evento.put("key", SUtil.uuid());
+            evento.put("descripcion", evento.getString("descripcion") + " (Copy)");
+            evento.put("fecha_on", SUtil.now());
+            evento.put("estado", 1);
+            SPGConect.insertArray(COMPONENT, new JSONArray().put(evento));
+
+            JSONObject staffs = Staff.getByKeyEvento(key);
+            JSONArray staffsNew = new JSONArray();
+            for (int i = 0; i < staffs.length(); i++) {
+                JSONObject staff = staffs.getJSONObject(JSONObject.getNames(staffs)[i]);
+                staff.put("key", SUtil.uuid());
+                staff.put("key_evento", evento.getString("key"));
+                staff.put("fecha_on", SUtil.now());
+                staff.put("estado", 1);
+                staffsNew.put(staff);
+            }
+            SPGConect.insertArray(Staff.COMPONENT, staffsNew);
+
+            obj.put("data", evento);
+            obj.put("estado", "exito");
+            
         } catch (Exception e) {
             obj.put("estado", "error");
             obj.put("error", e.getLocalizedMessage());

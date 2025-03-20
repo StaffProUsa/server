@@ -1,8 +1,13 @@
 #!/bin/bash
 
-scp  ./server.jar 2.2:/home/servisofts/servicios/StaffProUsa/entornos/StaffProUsa/servicios/StaffProUsa/
-#scp  ./servicio.pem 2.2:/home/servisofts/servicios/StaffProUsa/entornos/StaffProUsa/servicios/StaffProUsa/
-#scp  ./config.json 2.2:/home/servisofts/servicios/StaffProUsa/entornos/StaffProUsa/servicios/StaffProUsa/
-#scp  ./servisofts.jks 2.2:/home/servisofts/servicios/StaffProUsa/entornos/StaffProUsa/servicios/StaffProUsa/
-# ssh 10 'cd ~/servicios/StaffProUsa/ && ./servisofts.sh down'
-# ssh 10 'cd ~/servicios/StaffProUsa/ && ./servisofts.sh up -d'
+scp  ./server.jar servisofts@192.168.2.5:/home/servisofts/servicios/staffprousa/entornos/staffprousa/servicios/staffprousa/
+#scp  ./config.json 2.2:/home/servisofts/servicios/staffprousa/entornos/staffprousa/servicios/staffprousa/
+
+#scp -r  ./mail 2.2:/home/servisofts/servicios/staffprousa/entornos/staffprousa/servicios/staffprousa/
+
+
+#scp  ./servicio.pem 2.2:/home/servisofts/servicios/staffprousa/entornos/staffprousa/servicios/staffprousa/
+#scp  ./config.json 2.2:/home/servisofts/servicios/staffprousa/entornos/staffprousa/servicios/staffprousa/
+#scp  ./servisofts.jks 2.2:/home/servisofts/servicios/staffprousa/entornos/staffprousa/servicios/staffprousa/
+# ssh 10 'cd ~/servicios/staffprousa/ && ./servisofts.sh down'
+# ssh 10 'cd ~/servicios/staffprousa/ && ./servisofts.sh up -d'

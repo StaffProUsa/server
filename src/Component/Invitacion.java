@@ -84,7 +84,7 @@ public class Invitacion {
 
     public static JSONObject getByKey(String keyTarea) {
         try {
-            String consulta = "select get_by_key('" + keyTarea + "') as json";
+            String consulta = "select get_by_key('"+COMPONENT+"','" + keyTarea + "') as json";
             return SPGConect.ejecutarConsultaObject(consulta);
             
         } catch (Exception e) {

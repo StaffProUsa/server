@@ -1,1 +1,1 @@
-scp -r servisofts@192.168.2.2:/home/servisofts/servicios/StaffProUsa/entornos/StaffProUsa/servisoftsFiles/StaffProUsa/ /u01/servisoftsFiles/
+scp -r servisofts@192.168.2.5:/home/servisofts/servicios/StaffProUsa/entornos/StaffProUsa/servisoftsFiles/StaffProUsa/ /u01/servisoftsFiles/

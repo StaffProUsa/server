@@ -16,9 +16,36 @@ public class UsuarioCompany {
         switch (obj.getString("type")) {
             case "getAll": getAll(obj, session); break;
             case "getAllStaff": getAllStaff(obj, session); break;
+            case "getAllStaffEvento": getAllStaffEvento(obj, session); break;
             case "registro": registro(obj, session); break;
             case "editar": editar(obj, session); break;
             case "getCompanys": getCompanys(obj, session); break;
+            case "get": get(obj, session); break;
+            case "getByKey": getByKey(obj, session); break;
+        }
+    }
+
+    public static void getByKey(JSONObject obj, SSSessionAbstract session) {
+        try{
+            String consulta = "select get_by_key('"+COMPONENT+"', '"+obj.getString("key")+"') as json";
+            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            obj.put("data", data);
+            obj.put("estado", "exito");
+        }catch(Exception e){
+            obj.put("error", e.getLocalizedMessage());
+            obj.put("estado", "error");
+        }
+    }
+
+    public static void get(JSONObject obj, SSSessionAbstract session) {
+        try{
+            String consulta = "select get('"+COMPONENT+"', 'key_usuario', '"+obj.getString("key_usuario")+"', 'key_company', '"+obj.getString("key_company")+"') as json";
+            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            obj.put("data", data);
+            obj.put("estado", "exito");
+        }catch(Exception e){
+            obj.put("error", e.getLocalizedMessage());
+            obj.put("estado", "error");
         }
     }
 
@@ -38,6 +65,19 @@ public class UsuarioCompany {
         try {
             
             String consulta = "select get_all_staff('" + obj.getString("key_company") + "') as json";
+            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            obj.put("data", data);
+            obj.put("estado", "exito");
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            e.printStackTrace();
+        }
+    }
+
+    public static void getAllStaffEvento(JSONObject obj, SSSessionAbstract session) {
+        try {
+            
+            String consulta = "select get_all_staff_evento('" + obj.getString("key_evento") + "') as json";
             JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
             obj.put("data", data);
             obj.put("estado", "exito");
