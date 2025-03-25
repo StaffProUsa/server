@@ -10,6 +10,8 @@ public class Background extends Thread {
     public void run() {
         while (true) {
             try {
+                Thread.sleep(30*60*1000);
+
                 System.out.println("Quitando los que no aceptaron la invitacion...");
                 
                 String consulta = "select quitar_no_aprobados() as json";
@@ -19,9 +21,9 @@ public class Background extends Thread {
                 String fecha = SUtil.now();
                 System.out.println(fecha);
                 
-                Thread.sleep(30*60*1000);
             } catch (Exception e) {
                 SConsole.error(e.getLocalizedMessage());
+                
             }
         }
     }
