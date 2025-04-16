@@ -2,7 +2,7 @@ package SharedKernel;
 
 import org.json.JSONObject;
 
-import SocketCliente.SocketCliente;
+import Servisofts.SocketCliente.SocketCliente;
 
 public class Notification extends Thread {
 
@@ -64,7 +64,7 @@ public class Notification extends Thread {
     public void run() {
         try {
             Thread.sleep(5000);
-            SocketCliente.send("notification", getJson().toString());
+            SocketCliente.send("notification", getJson());
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

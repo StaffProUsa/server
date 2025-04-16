@@ -8,8 +8,8 @@ import javax.print.attribute.standard.JobKOctets;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Server.SSSAbstract.SSServerAbstract;
-import Server.SSSAbstract.SSSessionAbstract;
+import Servisofts.Server.SSSAbstract.SSServerAbstract;
+import Servisofts.Server.SSSAbstract.SSSessionAbstract;
 import Servisofts.SPGConect;
 import Servisofts.SUtil;
 

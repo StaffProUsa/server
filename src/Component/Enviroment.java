@@ -1,6 +1,6 @@
 package Component;
 
-import Server.SSSAbstract.SSSessionAbstract;
+import Servisofts.Server.SSSAbstract.SSSessionAbstract;
 import Servisofts.SPGConect;
 import org.json.JSONObject;
 

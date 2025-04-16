@@ -8,9 +8,8 @@ import org.eclipse.jetty.util.UrlEncoded;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import Server.SSSAbstract.SSServerAbstract;
-import Server.SSSAbstract.SSSessionAbstract;
-import ServerHttp.Api;
+import Servisofts.Server.SSSAbstract.SSServerAbstract;
+import Servisofts.Server.SSSAbstract.SSSessionAbstract;
 import Servisofts.SPGConect;
 import Servisofts.SUtil;
 
@@ -44,6 +43,22 @@ public class StaffUsuario {
             case "isJefe": isJefe(obj, session); break;
             case "getHistorico": getHistorico(obj, session); break;
             case "cambiarEvento": cambiarEvento(obj, session); break;
+            case "getHistoricoEntreFechas": getHistoricoEntreFechas(obj, session); break;
+            case "getEventoPerfil": getEventoPerfil(obj, session); break;
+        }
+    }
+
+    public static void getEventoPerfil(JSONObject obj, SSSessionAbstract session) {
+        try {
+
+            String consulta = "select staff_usuario_get_evento_perfil('"+obj.getString("key")+"') as json";
+            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            obj.put("data", data);
+            obj.put("estado", "exito");
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            obj.put("error", e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
 
@@ -482,9 +497,7 @@ public class StaffUsuario {
             JSONObject staffUSuario = StaffUsuario.getByKey(obj.getString("key_staff_usuario"));
 
             JSONObject acefalos = SPGConect.ejecutarConsultaObject("select get_staff_acefalos('"+staffUSuario.getString("key_staff")+"') as json");
-
             
-
             if(acefalos.getInt("acefalos")==0){
                 SPGConect.ejecutarUpdate("update "+COMPONENT+" set estado = 0 where key_staff = '"+staffUSuario.getString("key_staff")+"' and fecha_aprobacion_invitacion is null ");
                 obj.put("estado", "error");
@@ -513,11 +526,19 @@ public class StaffUsuario {
                 return;
             }
 
+            JSONObject usuarioCompany = UsuarioCompany.getByKeyStaff(staff.getString("key"), staffUSuario.getString("key_usuario"));
+
 
             JSONObject data = new JSONObject();
             data.put("key", obj.getString("key_staff_usuario"));
             data.put("fecha_aprobacion_invitacion", SUtil.now());
             data.put("estado", 1);
+
+            if(!usuarioCompany.isNull("salario_hora")){
+                data.put("salario_hora", usuarioCompany.optDouble("salario_hora"));
+            }
+
+
             
             SPGConect.editObject(COMPONENT, data);
            
@@ -640,9 +661,6 @@ public class StaffUsuario {
                 staffUsuario.put("key_staff", obj.getString("key_staff"));
                 SPGConect.editObject(COMPONENT, staffUsuario);
             }
-
-            
-
             
             obj.put("data", data);
             obj.put("estado", "exito");
@@ -656,6 +674,20 @@ public class StaffUsuario {
     public static void getHistorico(JSONObject obj, SSSessionAbstract session) {
         try {
             String consulta = "select get_historico('"+obj.getString("key_usuario")+"') as json";
+            
+            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            obj.put("data", data);
+            obj.put("estado", "exito");
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            obj.put("error", e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void getHistoricoEntreFechas(JSONObject obj, SSSessionAbstract session) {
+        try {
+            String consulta = "select get_historico('"+obj.getString("key_usuario")+"', '"+obj.getString("fecha_inicio")+"', '"+obj.getString("fecha_fin")+"') as json"; 
             
             JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
             obj.put("data", data);

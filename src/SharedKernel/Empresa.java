@@ -2,7 +2,7 @@ package SharedKernel;
 
 import org.json.JSONObject;
 
-import SocketCliente.SocketCliente;
+import Servisofts.SocketCliente.SocketCliente;
 
 public class  Empresa {
     

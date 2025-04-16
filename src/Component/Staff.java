@@ -4,13 +4,9 @@ import java.time.OffsetDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import com.google.gson.JsonObject;
-
-import Server.SSSAbstract.SSSessionAbstract;
+import Servisofts.Server.SSSAbstract.SSSessionAbstract;
 import Servisofts.SPGConect;
 import Servisofts.SUtil;
 
@@ -25,6 +21,7 @@ public class Staff {
             case "getUsuariosDisponibles": getUsuariosDisponibles(obj, session); break;
             case "registro": registro(obj, session); break;
             case "editar": editar(obj, session); break;
+            case "duplicar": duplicar(obj, session); break;
             case "getStaffChange": getStaffChange(obj, session); break;
         }
     }
@@ -95,6 +92,33 @@ public class Staff {
         }
     }
     
+    public static void duplicar(JSONObject obj, SSSessionAbstract session) {
+        try {
+            String key = obj.getString("key_staff");
+
+            JSONObject staff = getByKey(key);
+            staff.put("key", SUtil.uuid());
+            
+            String fec[] = staff.getString("fecha_inicio").split("T");
+            staff.put("fecha_inicio", SUtil.now().split("T")[0] + "T" + fec[1]);
+            
+            fec = staff.getString("fecha_fin").split("T");
+            staff.put("fecha_fin", SUtil.now().split("T")[0] + "T" + fec[1]);
+        
+
+            staff.put("fecha_on", SUtil.now());
+            staff.put("estado", 1);
+            SPGConect.insertArray(Staff.COMPONENT, new JSONArray().put(staff));
+
+            obj.put("data", staff);
+            obj.put("estado", "exito");
+            
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            obj.put("error", e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
 
     // Staff disponibles para cambiar en el booking
     public static void getStaffChange(JSONObject obj, SSSessionAbstract session) {
@@ -147,9 +171,11 @@ public class Staff {
                 data.put("fecha_inicio", SUtil.formatTimestamp(dini));
             }
 
+
+
             if (data.has("fecha_fin") && !data.isNull("fecha_fin")) {
                 // Extrae solo la parte de tiempo de fecha_inicio y fecha_fin
-                String tiempoInicio = data.getString("fecha_inicio").split(" ")[1];
+                String tiempoInicio = data.getString("fecha_inicio").split("T")[1];
                 String tiempoFin = data.getString("fecha_fin").split(" ")[1];
             
                 // Concatena la fecha del evento con el tiempo de fecha_inicio y fecha_fin
@@ -173,7 +199,19 @@ public class Staff {
                     dfin = cal.getTime();
                 }
                 data.put("fecha_fin", SUtil.formatTimestamp(dfin));
+            }else{
+                OffsetDateTime offsetDateTimeInicio = OffsetDateTime.parse(data.getString("fecha_inicio"));
+                Date dini = Date.from(offsetDateTimeInicio.toInstant());
+                
+                Calendar cal = new GregorianCalendar();
+                cal.setTime(dini);
+                cal.add(Calendar.DAY_OF_MONTH, 2); //El dijo 48 horas
+                Date dfin = cal.getTime();
+                
+                data.put("fecha_fin", SUtil.formatTimestamp(dfin));
             }
+
+
             
 
             data.put("key_usuario", obj.getString("key_usuario"));

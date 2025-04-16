@@ -12,7 +12,7 @@ public class Background extends Thread {
             try {
                 Thread.sleep(30*60*1000);
 
-                System.out.println("Quitando los que no aceptaron la invitacion...");
+                System.out.println("Quitando los que no aceptaron la invitacion... (DESACTIVADO)");
                 
                 String consulta = "select quitar_no_aprobados() as json";
                 

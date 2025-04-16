@@ -2,7 +2,7 @@ package Component;
 
 import org.json.JSONObject;
 
-import SocketCliente.SocketCliente;
+import Servisofts.SocketCliente.SocketCliente;
 
 public class Notification extends Thread {
     
@@ -11,7 +11,7 @@ public class Notification extends Thread {
     public void run(){
         try {
             Thread.sleep(5000);
-            SocketCliente.send("notification", obj.toString());
+            SocketCliente.send("notification", obj);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

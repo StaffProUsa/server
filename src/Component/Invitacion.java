@@ -10,10 +10,10 @@ import org.json.JSONObject;
 import Servisofts.SConsole;
 import Servisofts.SPGConect;
 import Servisofts.SUtil;
-import SocketCliente.SocketCliente;
-import Server.SSSAbstract.SSServerAbstract;
-import Server.SSSAbstract.SSSessionAbstract;
-import Server.ServerSocket.ServerSocket;
+import Servisofts.SocketCliente.SocketCliente;
+import Servisofts.Server.SSSAbstract.SSServerAbstract;
+import Servisofts.Server.SSSAbstract.SSSessionAbstract;
+import Servisofts.Server.ServerSocket.ServerSocket;
 
 public class Invitacion {
     public static final String COMPONENT = "invitacion";

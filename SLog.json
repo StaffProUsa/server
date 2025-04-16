@@ -1,11 +1,11 @@
 {
   "Servicios": {
     "notification": true,
-    "sqr": true,
     "roles_permisos": true,
+    "sqr": true,
     "usuario": true,
     "geolocation": true
   },
   "- SLog": "RealTime Log from server Servisofts",
-  "- Fecha": "2025-03-24T21:59:46.463-04:00"
+  "- Fecha": "2025-04-09T17:49:31.030-04:00"
 }

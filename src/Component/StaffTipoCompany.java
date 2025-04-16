@@ -2,7 +2,7 @@ package Component;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import Server.SSSAbstract.SSSessionAbstract;
+import Servisofts.Server.SSSAbstract.SSSessionAbstract;
 import Servisofts.SPGConect;
 import Servisofts.SUtil;
 
@@ -51,6 +51,16 @@ public class StaffTipoCompany {
             obj.put("estado", "error");
             obj.put("error", e.getLocalizedMessage());
             e.printStackTrace();
+        }
+    }
+
+    public static JSONObject getByKey(String key_staff_tipo) {
+        try {
+            String consulta = "select get_by('" + COMPONENT + "','key_staff_tipo', '"+key_staff_tipo+"') as json";
+            return SPGConect.ejecutarConsultaObject(consulta);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

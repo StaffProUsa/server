@@ -2,7 +2,7 @@ package Component;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import Server.SSSAbstract.SSSessionAbstract;
+import Servisofts.Server.SSSAbstract.SSSessionAbstract;
 import Servisofts.SConfig;
 import Servisofts.SPGConect;
 import Servisofts.SUtil;
@@ -240,6 +240,9 @@ public class Evento {
             JSONObject evento = getByKey(key);
             evento.put("key", SUtil.uuid());
             evento.put("descripcion", evento.getString("descripcion") + " (Copy)");
+            String[] fec = evento.getString("fecha").split("T");
+            evento.put("fecha", SUtil.now().split("T")[0] + "T" + fec[1]);
+            evento.put("fecha", SUtil.now());
             evento.put("fecha_on", SUtil.now());
             evento.put("estado", 1);
             SPGConect.insertArray(COMPONENT, new JSONArray().put(evento));
@@ -250,6 +253,14 @@ public class Evento {
                 JSONObject staff = staffs.getJSONObject(JSONObject.getNames(staffs)[i]);
                 staff.put("key", SUtil.uuid());
                 staff.put("key_evento", evento.getString("key"));
+                
+                fec = staff.getString("fecha_inicio").split("T");
+                staff.put("fecha_inicio", SUtil.now().split("T")[0] + "T" + fec[1]);
+                
+                fec = staff.getString("fecha_fin").split("T");
+                staff.put("fecha_fin", SUtil.now().split("T")[0] + "T" + fec[1]);
+            
+
                 staff.put("fecha_on", SUtil.now());
                 staff.put("estado", 1);
                 staffsNew.put(staff);

@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import Servisofts.SPGConect;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import Server.SSSAbstract.SSSessionAbstract;
+import Servisofts.Server.SSSAbstract.SSSessionAbstract;
 
 public class UsuarioCompany {
     public static final String COMPONENT = "usuario_company";
@@ -36,6 +36,17 @@ public class UsuarioCompany {
             obj.put("estado", "error");
         }
     }
+
+    public static JSONObject getByKeyStaff(String keyStaff, String keyUsuario) {
+        try{
+            String consulta = "select get_usuario_company_staff('"+keyStaff+"', '"+keyUsuario+"') as json";
+            return SPGConect.ejecutarConsultaObject(consulta);
+        }catch(Exception e){
+            e.printStackTrace();
+            return null;
+        }
+    }
+    
 
     public static void get(JSONObject obj, SSSessionAbstract session) {
         try{
