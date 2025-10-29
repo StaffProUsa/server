@@ -43,6 +43,7 @@ public class Manejador {
             case Invitacion.COMPONENT: Invitacion.onMessage(obj, session); break;
             case StaffTipoCompany.COMPONENT: StaffTipoCompany.onMessage(obj, session); break;
             case Board.COMPONENT: Board.onMessage(obj, session); break;
+            case UsuarioBloqueadoCliente.COMPONENT: UsuarioBloqueadoCliente.onMessage(obj, session); break;
             /*case General.COMPONENT:
                 General.onMessage(obj, session);
                 break;*/

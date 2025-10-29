@@ -19,7 +19,7 @@ public class Wtspp {
                 msg+=companyCompleta.getJSONObject("evento").optString("observacion");
                 msg+="\n\n";
                 msg+="¡Click the link and accept the invitation!\n\n\n"+
-                "https://staffprousa.servisofts.com/link/invitation_event?key="+data.optString("key","")+" \n\n\n"+companyCompleta.getString("descripcion");
+                "https://staffpro-usa.com/link/invitation_event?key="+data.optString("key","")+" \n\n\n"+companyCompleta.getString("descripcion");
                 
                 
                 

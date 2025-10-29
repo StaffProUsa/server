@@ -31,13 +31,15 @@ public class StaffTipoFavorito {
 
     public static void getAll(JSONObject obj, SSSessionAbstract session) {
         try {
-            
+
             String consulta = "select get_all('" + COMPONENT + "') as json";
-            if(obj.has("key_usuario") && !obj.isNull("key_usuario")) {
-                consulta = "select get_all('" + COMPONENT + "', 'key_usuario', '" + obj.get("key_usuario") + "') as json";
+            if (obj.has("key_usuario") && !obj.isNull("key_usuario")) {
+                consulta = "select get_all('" + COMPONENT + "', 'key_usuario', '" + obj.get("key_usuario")
+                        + "') as json";
             }
-            if(obj.has("key_staff_tipo") && !obj.isNull("key_staff_tipo")) {
-                consulta = "select get_all('" + COMPONENT + "', 'key_staff_tipo', '" + obj.get("key_staff_tipo") + "') as json";
+            if (obj.has("key_staff_tipo") && !obj.isNull("key_staff_tipo")) {
+                consulta = "select get_all('" + COMPONENT + "', 'key_staff_tipo', '" + obj.get("key_staff_tipo")
+                        + "') as json";
             }
 
             JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
@@ -52,7 +54,7 @@ public class StaffTipoFavorito {
 
     public static void getByUser(JSONObject obj, SSSessionAbstract session) {
         try {
-            String consulta = "select get_staff_tipo_favorito('"+obj.getString("key_usuario")+"') as json";
+            String consulta = "select get_staff_tipo_favorito('" + obj.getString("key_usuario") + "') as json";
             JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
             obj.put("data", data);
             obj.put("estado", "exito");
@@ -62,9 +64,10 @@ public class StaffTipoFavorito {
             e.printStackTrace();
         }
     }
+
     public static void getByKey(JSONObject obj, SSSessionAbstract session) {
         try {
-            String consulta = "select get_by_key('" + COMPONENT + "', '"+obj.getString("key")+"') as json";
+            String consulta = "select get_by_key('" + COMPONENT + "', '" + obj.getString("key") + "') as json";
             JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
             obj.put("data", data);
             obj.put("estado", "exito");
@@ -77,7 +80,7 @@ public class StaffTipoFavorito {
 
     public static JSONObject getByKeyUsuario(String key_usuario) {
         try {
-            String consulta = "select get_all('" + COMPONENT + "', 'key_usuario', '"+key_usuario+"') as json";
+            String consulta = "select get_all('" + COMPONENT + "', 'key_usuario', '" + key_usuario + "') as json";
             return SPGConect.ejecutarConsultaObject(consulta);
         } catch (Exception e) {
             e.printStackTrace();
@@ -85,24 +88,35 @@ public class StaffTipoFavorito {
         }
     }
 
-    public static JSONObject getBy(String key_usuario, String key_staff_tipo) {
+    public static JSONObject getBy(String key_usuario, String key_staff_tipo, String key_company) {
         try {
-            String consulta = "select get_all('" + COMPONENT + "', 'key_usuario', '"+key_usuario+"', 'key_staff_tipo', '"+key_staff_tipo+"') as json";
+            String consulta = "select get_all('" + COMPONENT + "', 'key_usuario', '" + key_usuario
+                    + "', 'key_staff_tipo', '" + key_staff_tipo + "', 'key_company', '" + key_company + "') as json";
             return SPGConect.ejecutarConsultaObject(consulta);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
+    // public static JSONObject getBy(String key_usuario, String key_staff_tipo) {
+    // try {
+    // String consulta = "select get_all('" + COMPONENT + "', 'key_usuario',
+    // '"+key_usuario+"', 'key_staff_tipo', '"+key_staff_tipo+"') as json";
+    // return SPGConect.ejecutarConsultaObject(consulta);
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // return null;
+    // }
+    // }
 
     public static void registro(JSONObject obj, SSSessionAbstract session) {
         try {
 
             JSONObject data = obj.getJSONObject("data");
 
-            JSONObject staffTipoFavorito = getBy(data.getString("key_usuario"), data.getString("key_staff_tipo"));
+            JSONObject staffTipoFavorito = getBy(data.getString("key_usuario"), data.getString("key_staff_tipo"), data.getString("key_company"));
 
-            if(staffTipoFavorito!=null && !staffTipoFavorito.isEmpty()){
+            if (staffTipoFavorito != null && !staffTipoFavorito.isEmpty()) {
                 obj.put("estado", "error");
                 obj.put("error", "Ya se encuentra registrado");
                 return;
@@ -111,7 +125,7 @@ public class StaffTipoFavorito {
             data.put("key", SUtil.uuid());
             data.put("estado", 1);
             data.put("fecha_on", SUtil.now());
-            //data.put("key_usuario", obj.getString("key_usuario"));
+            // data.put("key_usuario", obj.getString("key_usuario"));
             SPGConect.insertArray(COMPONENT, new JSONArray().put(data));
             obj.put("data", data);
             obj.put("estado", "exito");

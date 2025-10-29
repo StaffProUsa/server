@@ -36,7 +36,7 @@ public class Pub {
                 throw new HttpException(Status.BAD_REQUEST, "Missing 'key' parameter");
             }
 
-            String url = "https://staffprousa.servisofts.com";
+            String url = "https://staffpro-usa.com";
             String url2 = url+"/invitationDetail?key="+key;
 
             if(this.redirect(exchange, url2)){
@@ -118,7 +118,7 @@ public class Pub {
                 throw new HttpException(Status.BAD_REQUEST, "Missing 'key' parameter");
             }
 
-            String url = "https://staffprousa.servisofts.com";
+            String url = "";
             String url2 = url+"/invitation?pk="+key;
 
             if(this.redirect(exchange, url2)){

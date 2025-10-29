@@ -185,7 +185,7 @@ public class Evento {
             obj.put("data", data);
             obj.put("estado", "exito");
 
-            enviarNotificacionEventoVentaEnable(null, data, obj.getString("key_usuario"));
+            // enviarNotificacionEventoVentaEnable(null, data, obj.getString("key_usuario"));
         } catch (Exception e) {
             obj.put("estado", "error");
             obj.put("error", e.getLocalizedMessage());
@@ -217,7 +217,7 @@ public class Evento {
             obj.put("data", data);
             obj.put("estado", "exito");
             
-            enviarNotificacionEventoVentaEnable(dataOld, data, obj.getString("key_usuario"));
+            // enviarNotificacionEventoVentaEnable(dataOld, data, obj.getString("key_usuario"));
         } catch (Exception e) {
             obj.put("estado", "error");
             obj.put("error", e.getLocalizedMessage());

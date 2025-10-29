@@ -23,6 +23,21 @@ public class Staff {
             case "editar": editar(obj, session); break;
             case "duplicar": duplicar(obj, session); break;
             case "getStaffChange": getStaffChange(obj, session); break;
+            case "getPerfilBoss": getPerfilBoss(obj, session); break;
+        }
+    }
+
+    public static void getPerfilBoss(JSONObject obj, SSSessionAbstract session) {
+        try {
+
+            String consulta = "select staff_profile_boss('" + obj.getString("key_staff") + "', '"+obj.getString("key_boss")+"') as json";
+            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            obj.put("data", data);
+            obj.put("estado", "exito");
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            obj.put("error", e.getLocalizedMessage());
+            e.printStackTrace();
         }
     }
 
@@ -192,7 +207,7 @@ public class Staff {
 
                 // Crear el objeto JSON y agregar la fecha
                 
-                if(dini.after(dfin)){
+                if(dini.after(dfin) || dini.equals(dfin)){
                     Calendar cal = new GregorianCalendar();
                     cal.setTime(dfin);
                     cal.add(Calendar.DAY_OF_MONTH, 1);
