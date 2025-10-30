@@ -12,7 +12,8 @@
         "reconectTime": 5000
     },
     "files": {
-        "url": "/u01/servisoftsFiles/StaffProUsa/",
+        "_url": "/u01/servisoftsFiles/StaffProUsa/",
+        "url": "/Users/rickypazd/Documents/GitHub/StaffProUsa/servisoftsFiles/StaffProUsa/",
         "url_gpx":"/u01/servisoftsFiles/StaffProUsa/gpx/"
     },
     "wtsp":{

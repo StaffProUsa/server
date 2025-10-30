@@ -56,6 +56,9 @@ public class StaffUsuario {
             case "desinvitarGrupo":
                 desinvitarGrupo(obj, session);
                 break;
+            case "getInvitacion":
+                getInvitacion(obj, session);
+                break;
             case "getInvitacionesPendientes":
                 getInvitacionesPendientes(obj, session);
                 break;
@@ -153,6 +156,33 @@ public class StaffUsuario {
     public static void getByKey(JSONObject obj, SSSessionAbstract session) {
         try {
             String consulta = "select get_by_key('" + COMPONENT + "', '" + obj.getString("key") + "') as json";
+            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            obj.put("data", data);
+            obj.put("estado", "exito");
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            obj.put("error", e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void getInvitacion(JSONObject obj, SSSessionAbstract session) {
+        try {
+            String consulta = """
+                        select to_json(sq1.*) as json
+                        FROM (
+                            SELECT 
+                                staff_usuario.*, 
+                                to_json(staff.*) as staff,
+                                to_json(evento.*) as evento
+                            FROM staff_usuario
+                            JOIN staff ON  staff_usuario.key_staff = staff.key
+                            JOIN evento ON staff.key_evento = evento.key
+                            WHERE staff_usuario.key = '%s'
+                        ) sq1
+
+                    """.formatted(obj.getString("key"));
+
             JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
             obj.put("data", data);
             obj.put("estado", "exito");
