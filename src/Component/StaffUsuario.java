@@ -50,6 +50,9 @@ public class StaffUsuario {
             case "invitar":
                 invitar(obj, session);
                 break;
+            case "asignarClockAll":
+                asignarClockAll(obj, session);
+                break;
             case "invitarGrupo":
                 invitarGrupo(obj, session);
                 break;
@@ -171,8 +174,8 @@ public class StaffUsuario {
             String consulta = """
                         select to_json(sq1.*) as json
                         FROM (
-                            SELECT 
-                                staff_usuario.*, 
+                            SELECT
+                                staff_usuario.*,
                                 to_json(staff.*) as staff,
                                 to_json(evento.*) as evento
                             FROM staff_usuario
@@ -386,6 +389,66 @@ public class StaffUsuario {
             JSONObject data = obj.getJSONObject("data");
             SPGConect.editObject(COMPONENT, data);
             obj.put("data", data);
+            obj.put("estado", "exito");
+        } catch (Exception e) {
+            obj.put("estado", "error");
+            obj.put("error", e.getLocalizedMessage());
+            e.printStackTrace();
+        }
+    }
+
+    public static void asignarClockAll(JSONObject obj, SSSessionAbstract session) {
+        try {
+            JSONArray key_staff_usuarios = obj.getJSONArray("key_staff_usuarios");
+
+            StringBuilder setClause = new StringBuilder();
+            boolean hasSet = false;
+
+            if (obj.has("fecha_ingreso")) {
+                if (obj.isNull("fecha_ingreso") || obj.getString("fecha_ingreso").isEmpty()) {
+                    // setClause.append("null");
+                } else {
+                    setClause.append("fecha_ingreso = ");
+                    setClause.append("'").append(obj.getString("fecha_ingreso")).append("'");
+                    hasSet = true;
+
+                }
+            }
+
+            if (obj.has("fecha_salida")) {
+
+                if (obj.isNull("fecha_salida") || obj.getString("fecha_salida").isEmpty()) {
+                    // setClause.append("null");
+                } else {
+
+                    if (hasSet)
+                        setClause.append(", ");
+
+                    setClause.append("fecha_salida = ");
+                    setClause.append("'").append(obj.getString("fecha_salida")).append("'");
+                }
+                hasSet = true;
+            }
+
+            if (!hasSet) {
+                obj.put("estado", "error");
+                obj.put("error", "No se proporcionó ninguna fecha para actualizar.");
+                return;
+            }
+
+            StringBuilder consulta = new StringBuilder("update staff_usuario set ");
+            consulta.append(setClause);
+            consulta.append(" where key in (");
+            for (int i = 0; i < key_staff_usuarios.length(); i++) {
+                consulta.append("'").append(key_staff_usuarios.getString(i)).append("'");
+                if (i < key_staff_usuarios.length() - 1) {
+                    consulta.append(", ");
+                }
+            }
+            consulta.append(")");
+
+            SPGConect.ejecutarUpdate(consulta.toString());
+
             obj.put("estado", "exito");
         } catch (Exception e) {
             obj.put("estado", "error");
