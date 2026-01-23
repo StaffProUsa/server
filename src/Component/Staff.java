@@ -270,7 +270,7 @@ public class Staff {
 
                 // Crear el objeto JSON y agregar la fecha
                 
-                if(dini.after(dfin)){
+                if(dini.after(dfin) || dini.equals(dfin)){
                     Calendar cal = new GregorianCalendar();
                     cal.setTime(dfin);
                     cal.add(Calendar.DAY_OF_MONTH, 1);
