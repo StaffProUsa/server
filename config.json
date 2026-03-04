@@ -12,8 +12,8 @@
         "reconectTime": 5000
     },
     "files": {
-        "_url": "/u01/servisoftsFiles/StaffProUsa/",
-        "url": "/Users/rickypazd/Documents/GitHub/StaffProUsa/servisoftsFiles/StaffProUsa/",
+        "url": "/u01/servisoftsFiles/StaffProUsa/",
+        "_url": "/Users/rickypazd/Documents/GitHub/StaffProUsa/servisoftsFiles/StaffProUsa/",
         "url_gpx":"/u01/servisoftsFiles/StaffProUsa/gpx/"
     },
     "wtsp":{
@@ -44,7 +44,7 @@
     "mail_server": {
         "host": "smtp.gmail.com",
         "port": 587,
-        "email": "servisofts.srl@gmail.com",
-        "password": "udqu esjy grcj xmwl"
+        "email": "staffprousa901@gmail.com",
+        "password": "unvu nkzz yads jkul"
     }
 }

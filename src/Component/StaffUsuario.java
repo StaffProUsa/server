@@ -654,6 +654,7 @@ public class StaffUsuario {
                 SPGConect.ejecutarUpdate("update " + COMPONENT + " set estado = 0 where key_staff = '"
                         + staffUSuario.getString("key_staff") + "' and fecha_aprobacion_invitacion is null ");
                 obj.put("estado", "error");
+                obj.put("error_code", "EVENTO_LLENO");
                 obj.put("error", "Ya no existe posicion disponible");
                 return;
 
@@ -664,18 +665,22 @@ public class StaffUsuario {
                         + staffUSuario.getString("key_staff") + "' and fecha_aprobacion_invitacion is null ");
             }
 
+
             // Verificamos el staff para saber las fechas de ingreso y salida
             JSONObject staff = Staff.getByKey(staffUSuario.getString("key_staff"));
 
             // Verificamos si es que tenemos un trabajo en esas fechas
-            String fecha_fin = staff.isNull("fecha_fin") ? "9999-12-31" : staff.getString("fecha_fin");
             JSONObject staffUsuario = SPGConect.ejecutarConsultaObject(
-                    "select get_staff_usuario_entre_fechas('" + staffUSuario.getString("key_usuario") + "', '"
-                            + staff.getString("fecha_inicio") + "', '" + fecha_fin + "') as json");
+                    "select get_staff_usuario_entre_fechas_solo_dia('" + staffUSuario.getString("key_usuario") + "', '"
+                            + staff.getString("fecha_inicio") + "') as json");
+            // JSONObject staffUsuario = SPGConect.ejecutarConsultaObject(
+            //         "select get_staff_usuario_entre_fechas('" + staffUSuario.getString("key_usuario") + "', '"
+            //                 + staff.getString("fecha_inicio") + "', '" + fecha_fin + "') as json");
 
             if (!staffUsuario.isEmpty()) {
                 obj.put("estado", "error");
-                obj.put("error", "Ya tienes una posicion en ese horario");
+                obj.put("error_code", "YA_TIENE_POSICION");
+                obj.put("error", "Ya tienes una posicion para este día");
                 obj.put("key_staff_usuario", JSONObject.getNames(staffUSuario)[0]);
                 return;
             }

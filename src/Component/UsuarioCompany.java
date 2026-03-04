@@ -76,7 +76,7 @@ public class UsuarioCompany {
         try {
             
             String consulta = "select get_all_staff('" + obj.getString("key_company") + "') as json";
-            JSONObject data = SPGConect.ejecutarConsultaObject(consulta);
+            JSONObject data = new JSONObject(SPGConect.ejecutarConsultaString(consulta));
             obj.put("data", data);
             obj.put("estado", "exito");
         } catch (Exception e) {
