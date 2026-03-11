@@ -16,16 +16,16 @@ import Servisofts.SUtil;
 public class fetch {
 
 
-    public static JSONArray get(String token, String service) {
+    public static JSONArray get( String service) {
         try {
 
-            String url_ = SConfig.getJSON("kolping").getString("url");
+            // String url_ = SConfig.getJSON("kolping").getString("url");
 
-            URL url = new URL(url_+service);
+            URL url = new URL(service);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
                 con.setRequestMethod("GET");
 
-            con.setRequestProperty("Authorization", "Bearer "+token);
+            // con.setRequestProperty("Authorization", "Bearer "+token);
             
             con.setUseCaches(false);
             con.setDoOutput(true);
