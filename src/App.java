@@ -1,4 +1,5 @@
 import Component.Background;
+import Component.PushScheduler;
 import Controllers.Pub;
 import Servisofts.Servisofts;
 import Servisofts.http.Rest;
@@ -14,6 +15,7 @@ public class App {
             //Rest.addController(BancoGanaderoController.class);
             Rest.addController(Pub.class);
             new Background().start();
+            new PushScheduler().start();
             
         } catch (Exception e) {
             e.printStackTrace();

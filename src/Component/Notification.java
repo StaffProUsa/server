@@ -75,6 +75,27 @@ public class Notification extends Thread {
         this.start();
     }
 
+    // Igual que send_urlV2 pero con tags arbitrarios (el microservicio exige que el token cumpla todos;
+    // un tag con valor "is null" coincide con los tokens que no lo tienen)
+    public void send_urlV2Tags(String key_usuario_emisor, JSONObject tags, String titulo, String desc, String deepLink) throws Exception{
+        JSONObject not = new JSONObject();
+        not.put("descripcion", titulo);
+        not.put("observacion", desc);
+
+        JSONObject data = new JSONObject();
+        data.put("deepLink", deepLink);
+        not.put("data", data);
+
+        JSONObject objNotificacion = new JSONObject();
+        objNotificacion.put("component", "notification");
+        objNotificacion.put("type", "sendV2");
+        objNotificacion.put("key_usuario_emisor", key_usuario_emisor);
+        objNotificacion.put("data", not);
+        objNotificacion.put("tags", tags);
+        this.obj = objNotificacion;
+        this.start();
+    }
+
     public void send_urlV2(String key_empresa, String key_usuario_emisor, String key_usuario_receptor, String titulo, String desc, String url_image, String deepLink) throws Exception{
         JSONObject not = new JSONObject();
         not.put("descripcion", titulo);

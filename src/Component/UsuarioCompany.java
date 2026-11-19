@@ -153,6 +153,10 @@ public class UsuarioCompany {
                 return;
             }
             SPGConect.insertArray(COMPONENT, new JSONArray().put(data));
+
+            // Un admin agregó a otro usuario a la empresa (si se une él mismo por link, no se avisa)
+            Push.agregadoAEmpresa(data.getString("key_company"), data.getString("key_usuario"), obj.optString("key_usuario"));
+
             obj.put("data", data);
             obj.put("estado", "exito");
         } catch (Exception e) {

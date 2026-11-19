@@ -387,7 +387,20 @@ public class StaffUsuario {
     public static void editar(JSONObject obj, SSSessionAbstract session) {
         try {
             JSONObject data = obj.getJSONObject("data");
+
+            // "No, gracias" de la invitación: estado 0 + fecha_rechazo sobre una invitación pendiente (estado 2)
+            JSONObject rechazada = null;
+            if (data.has("fecha_rechazo") && data.optInt("estado", -1) == 0) {
+                JSONObject previo = getByKey(data.getString("key"));
+                if (previo != null && previo.optInt("estado") == 2) rechazada = previo;
+            }
+
             SPGConect.editObject(COMPONENT, data);
+
+            if (rechazada != null) {
+                Push.invitacionRechazada(rechazada, obj.optString("key_usuario", data.optString("key_usuario")));
+            }
+
             obj.put("data", data);
             obj.put("estado", "exito");
         } catch (Exception e) {
@@ -491,6 +504,8 @@ public class StaffUsuario {
             data.put("key_usuario_aprueba", obj.getString("key_usuario"));
             SPGConect.insertObject(COMPONENT, data);
 
+            Push.invitacionEvento(data.getString("key"), key_staff, key_usuario_invitado, obj.getString("key_usuario"));
+
             obj.put("data", data);
             obj.put("estado", "exito");
         } catch (Exception e) {
@@ -530,7 +545,17 @@ public class StaffUsuario {
             String consulta = "UPDATE " + COMPONENT + " SET estado = 0 WHERE key_staff = '" + key_staff
                     + "' AND key_usuario IN (" + placeholders.toString() + ")";
 
+            // Solo se avisa a quienes tenían la invitación activa
+            JSONArray activos = SPGConect.ejecutarConsultaArray(
+                    "select coalesce(json_agg(distinct key_usuario), '[]') as json from " + COMPONENT
+                            + " where key_staff = '" + key_staff + "' and estado > 0 and key_usuario in ("
+                            + placeholders.toString() + ")");
+
             SPGConect.ejecutarUpdate(consulta);
+
+            for (int i = 0; i < activos.length(); i++) {
+                Push.invitacionCancelada(key_staff, activos.getString(i), obj.optString("key_usuario"));
+            }
 
             obj.put("data", usuariosDesinvitadosJson);
             obj.put("estado", "exito");
@@ -618,6 +643,12 @@ public class StaffUsuario {
             }
 
             SPGConect.insertArray(COMPONENT, invitados);
+
+            for (int i = 0; i < invitados.length(); i++) {
+                JSONObject inv = invitados.getJSONObject(i);
+                Push.invitacionEvento(inv.getString("key"), key_staff, inv.getString("key_usuario"), obj.getString("key_usuario"));
+            }
+
             obj.put("data", invitados);
             obj.put("estado", "exito");
         } catch (Exception e) {
@@ -713,6 +744,8 @@ public class StaffUsuario {
             }
 
             SPGConect.editObject(COMPONENT, data);
+
+            Push.invitacionAceptada(staffUSuario, obj.optString("key_usuario"));
 
             obj.put("data", data);
             obj.put("estado", "exito");
